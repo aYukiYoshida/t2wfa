@@ -13,11 +13,11 @@ type Image = {
   date: string;
 };
 
-interface ImageCardProps {
+type ImageCardProps = {
   apiKey: string | null;
-}
+};
 
-const ImageCard: FC<ImageCardProps> = ({apiKey}) => {
+const ImageCard: FC<ImageCardProps> = ({apiKey}): JSX.Element => {
   const [image, setImage] = useState<Image | null>(null);
   const url = apiKey
     ? `https://api.nasa.gov/planetary/apod?api_key=${apiKey}`

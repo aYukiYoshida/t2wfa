@@ -1,10 +1,10 @@
 import {useState, FC} from "react";
 
-interface ExpandableTextProps {
+type ExpandableTextProps = {
   text: string; // text は文字列型
-}
+};
 
-const ExpandableText: FC<ExpandableTextProps> = ({text}) => {
+const ExpandableText: FC<ExpandableTextProps> = ({text}): JSX.Element => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const toggleText = () => {

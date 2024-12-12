@@ -3,11 +3,11 @@ import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import setCookie from "@/utils/cookie/setCookie";
 
-interface InputKeyProps {
+type InputKeyProps = {
   setShowImageCard: Dispatch<boolean>;
-}
+};
 
-const InputKey: FC<InputKeyProps> = ({setShowImageCard}) => {
+const InputKey: FC<InputKeyProps> = ({setShowImageCard}): JSX.Element => {
   const [inputKeyValue, setInputKeyValue] = useState<string>("");
 
   const handleInputKeyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
