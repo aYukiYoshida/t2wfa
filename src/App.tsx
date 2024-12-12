@@ -6,13 +6,19 @@ import getCookie from "@/utils/cookie/getCookie";
 
 function App() {
   const [showImageCard, setShowImageCard] = useState<boolean>(false);
-  const source = showImageCard ? (
-    <ImageCard apiKey={getCookie("key")} />
-  ) : (
-    <InputKey setShowImageCard={setShowImageCard} />
-  );
-
-  return <Background source={source} />;
+  if (showImageCard) {
+    return (
+      <Background className="items-start">
+        <ImageCard apiKey={getCookie("key")} />
+      </Background>
+    );
+  } else {
+    return (
+      <Background className="items-center">
+        <InputKey setShowImageCard={setShowImageCard} />
+      </Background>
+    );
+  }
 }
 
 export default App;

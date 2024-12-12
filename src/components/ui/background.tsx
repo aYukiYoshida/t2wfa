@@ -1,15 +1,20 @@
-import {FC} from "react";
+import * as React from "react";
 
-interface BackgroundProps {
-  source: JSX.Element;
-}
+import {cn} from "@/lib/utils";
 
-const Background: FC<BackgroundProps> = ({source}): JSX.Element => {
-  return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-900 to-gray-900">
-      {source}
-    </div>
-  );
-};
+const Background = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({className, ...props}, ref) => (
+  <div
+    ref={ref}
+    className={cn(
+      "flex justify-center min-h-screen bg-gradient-to-br from-blue-900 to-gray-900",
+      className
+    )}
+    {...props}
+  />
+));
+Background.displayName = "Background";
 
 export {Background};

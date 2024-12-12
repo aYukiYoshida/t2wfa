@@ -17,7 +17,7 @@ const ExpandableText: FC<ExpandableTextProps> = ({text}): JSX.Element => {
         onClick={toggleText}
         className={`cursor-pointer transition-all duration-300 ${
           isExpanded
-            ? "whitespace-normal"
+            ? "text-balance whitespace-normal break-words hyphens-auto"
             : "text-ellipsis overflow-hidden whitespace-nowrap"
         }`}
         title={isExpanded ? "Click to collapse" : "Click to expand"}
