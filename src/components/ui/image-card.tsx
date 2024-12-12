@@ -30,7 +30,7 @@ const ImageCard: FC<ImageCardProps> = ({apiKey}) => {
       .catch((error) => console.error("Fetching data failed", error));
   }, [url]);
 
-  if (!image) return <div>Loading...</div>;
+  if (!image) return <div className="text-white">Loading...</div>;
 
   return (
     <Card className="w-full max-w-md bg-gradient-to-br from-gray-900 to-gray-800 text-white shadow-xl">
