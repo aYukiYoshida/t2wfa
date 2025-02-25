@@ -6,8 +6,8 @@ type Image = {
   title: string;
   explanation: string;
   copyright: string;
-  media_type: string;
-  hdurl: string;
+  media_type: "image" | "video";
+  hdurl?: string;
   url: string;
   service_version: string;
   date: string;
