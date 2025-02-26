@@ -1,7 +1,7 @@
 import {useState, FC, Dispatch} from "react";
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
-import setCookie from "@/utils/cookie/setCookie";
+import Cookie from "@/lib/cookie";
 
 type InputKeyProps = {
   setShowImageCard: Dispatch<boolean>;
@@ -15,7 +15,7 @@ const InputKey: FC<InputKeyProps> = ({setShowImageCard}): JSX.Element => {
   };
 
   const handleSaveKeyClick = () => {
-    setCookie("key", inputKeyValue);
+    Cookie.setCookie("key", inputKeyValue);
     setShowImageCard(true);
   };
 
