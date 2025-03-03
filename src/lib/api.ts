@@ -1,21 +1,26 @@
 import {ApodImageResponse} from "@/lib/types";
 
-const baseUrl = "https://api.nasa.gov/planetary/apod";
+export class ApodImageClient {
+  private url: string;
+  private baseUrl = "https://api.nasa.gov/planetary/apod";
 
-async function getApodImage(apiKey: string | null): Promise<ApodImageResponse> {
-  const url = apiKey
-    ? `${baseUrl}?api_key=${apiKey}`
-    : `${baseUrl}?api_key=DEMO_KEY`;
-
-  const response = await fetch(url);
-
-  if (!response.ok) {
-    throw new Error(
-      `Failed to fetch data: ${response.status} ${response.statusText}`
-    );
+  constructor(apiKey?: string | null) {
+    this.url = apiKey
+      ? `${this.baseUrl}?api_key=${apiKey}`
+      : `${this.baseUrl}?api_key=DEMO_KEY`;
   }
-  const image: ApodImageResponse = await response.json();
-  return image;
+
+  async get(): Promise<ApodImageResponse> {
+    const response = await fetch(this.url);
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch data: ${response.status} ${response.statusText}`
+      );
+    }
+    const image: ApodImageResponse = await response.json();
+    return image;
+  }
 }
 
-export default {getApodImage};
+export default {ApodImageClient};

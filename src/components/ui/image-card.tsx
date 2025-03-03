@@ -3,10 +3,12 @@ import {Card, CardHeader, CardTitle, CardContent} from "@/components/ui/card";
 import {ExpandableText} from "@/components/ui/expandable-text";
 import Cookie from "@/lib/cookie";
 import Hooks from "@/lib/hooks";
+import {ApodImageClient} from "@/lib/api";
 
 const ImageCard: FC = (): JSX.Element => {
   const apiKey = Cookie.getCookie("key");
-  const {image, loading, error} = Hooks.useFetchApodImage(apiKey);
+  const client = new ApodImageClient(apiKey);
+  const {image, loading, error} = Hooks.useFetchApodImage(client);
 
   if (loading) return <p className="text-white">Loading...</p>;
   if (!image || error)

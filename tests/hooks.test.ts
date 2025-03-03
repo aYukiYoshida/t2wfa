@@ -1,6 +1,7 @@
 import {renderHook, waitFor} from "@testing-library/react";
 import {describe, afterEach, it, vi} from "vitest";
 import Hooks from "@/lib/hooks";
+import {ApodImageClient} from "@/lib/api";
 
 describe("テストスタブを用いたテストコード", () => {
   // テストスタブは、テスト対象への間接入力を操作するテストダブルである
@@ -14,25 +15,26 @@ describe("テストスタブを用いたテストコード", () => {
         // テストスタブの定義
         vi.mock("@/lib/api", () => {
           return {
-            default: {
-              getApodImage: vi.fn().mockResolvedValue({
-                copyright: "copyright",
-                date: "2025-02-26",
-                explanation: "explanation",
-                hdurl:
-                  "https://apod.nasa.gov/apod/image/2502/ClusterRing_Euclid_2665.jpg",
-                media_type: "image",
-                service_version: "v1",
-                title: "Einstein Ring Surrounds Nearby Galaxy Center",
-                url: "https://apod.nasa.gov/apod/image/2502/ClusterRing_Euclid_960.jpg",
-              }),
-            },
+            ApodImageClient: vi.fn().mockImplementation(() => {
+              return {
+                get: vi.fn().mockResolvedValue({
+                  copyright: "copyright",
+                  date: "2025-02-26",
+                  explanation: "explanation",
+                  hdurl:
+                    "https://apod.nasa.gov/apod/image/2502/ClusterRing_Euclid_2665.jpg",
+                  media_type: "image",
+                  service_version: "v1",
+                  title: "Einstein Ring Surrounds Nearby Galaxy Center",
+                  url: "https://apod.nasa.gov/apod/image/2502/ClusterRing_Euclid_960.jpg",
+                }),
+              };
+            }),
           };
         });
 
-        const {result} = renderHook(() =>
-          Hooks.useFetchApodImage("any-api-key")
-        );
+        const client = new ApodImageClient("SPECIFIED_KEY");
+        const {result} = renderHook(() => Hooks.useFetchApodImage(client));
 
         // 非同期処理の完了を待つ
         await waitFor(() => {
