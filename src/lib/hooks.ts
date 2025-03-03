@@ -1,8 +1,8 @@
 import {useState, useEffect} from "react";
 import {ApodImageResponse} from "@/lib/types";
-import {ApodImageClient} from "@/lib/api";
+import Api from "@/lib/api";
 
-const useFetchApodImage = (client: ApodImageClient) => {
+const useFetchApodImage = (apiKey: string | null) => {
   const [image, setImage] = useState<ApodImageResponse>();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
@@ -11,7 +11,7 @@ const useFetchApodImage = (client: ApodImageClient) => {
     const fetchImage = async () => {
       setLoading(true);
       try {
-        const imageResponse = await client.get();
+        const imageResponse = await Api.getApodImage(apiKey);
         setImage(imageResponse);
       } catch (err) {
         setError(err as Error);
@@ -21,7 +21,7 @@ const useFetchApodImage = (client: ApodImageClient) => {
     };
 
     fetchImage();
-  }, [client]);
+  }, [apiKey]);
 
   return {image, loading, error};
 };

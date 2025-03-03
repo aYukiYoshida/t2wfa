@@ -2,7 +2,7 @@ import {describe, afterEach, afterAll, beforeAll, it, vi} from "vitest";
 import {http, HttpResponse} from "msw";
 import {setupServer} from "msw/node";
 
-import {ApodImageClient} from "@/lib/api";
+import Api from "@/lib/api";
 
 describe("テストスパイを用いたテストコードの例", () => {
   // テストスパイは、テスト対象の間接出力を記録し、テストコードからそれを参照可能にするテストダブルである
@@ -35,8 +35,7 @@ describe("テストスパイを用いたテストコードの例", () => {
     describe("APIキーを指定した場合", () => {
       it("指定したAPIキーでAPODの画像の情報が取得される", async ({expect}) => {
         const fetchSpy = arrangeFetchSpy();
-        const client = new ApodImageClient("SPECIFIED_KEY");
-        await client.get();
+        await Api.getApodImage("SPECIFIED_KEY");
         expect(fetchSpy).toHaveBeenCalledTimes(1);
         expect(fetchSpy).toHaveBeenCalledWith(
           "https://api.nasa.gov/planetary/apod?api_key=SPECIFIED_KEY"
@@ -46,8 +45,7 @@ describe("テストスパイを用いたテストコードの例", () => {
     describe("APIキーを指定しない場合", () => {
       it("デモ用のAPIキーでAPODの画像の情報が取得される", async ({expect}) => {
         const fetchSpy = arrangeFetchSpy();
-        const client = new ApodImageClient();
-        await client.get();
+        await Api.getApodImage(null);
         expect(fetchSpy).toHaveBeenCalledTimes(1);
         expect(fetchSpy).toHaveBeenCalledWith(
           "https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY"
@@ -114,8 +112,7 @@ describe("フェイクオブジェクトを用いたテストコードの例", (
     describe("APIキーを指定した場合", () => {
       describe("有効なAPIキーを指定した場合", () => {
         it("APODの画像情報の取得が成功する", async ({expect}) => {
-          const client = new ApodImageClient("VALID_KEY");
-          const apodImage = await client.get();
+          const apodImage = await Api.getApodImage("VALID_KEY");
           expect(apodImage).toEqual({
             copyright: "copyright",
             date: "2025-02-26",
@@ -131,8 +128,7 @@ describe("フェイクオブジェクトを用いたテストコードの例", (
       });
       describe("無効なAPIキーを指定した場合", () => {
         it("APODの画像情報の取得が失敗する", async ({expect}) => {
-          const client = new ApodImageClient("INVALID_KEY");
-          await expect(client.get()).rejects.toThrowError(
+          await expect(Api.getApodImage("INVALID_KEY")).rejects.toThrowError(
             "Failed to fetch data: 403 Forbidden"
           );
         });
@@ -140,8 +136,7 @@ describe("フェイクオブジェクトを用いたテストコードの例", (
     });
     describe("APIキーを指定しない場合", () => {
       it("APODの画像情報の取得が成功する", async ({expect}) => {
-        const client = new ApodImageClient();
-        const apodImage = await client.get();
+        const apodImage = await Api.getApodImage(null);
         expect(apodImage).toEqual({
           copyright: "copyright",
           date: "2025-02-26",
