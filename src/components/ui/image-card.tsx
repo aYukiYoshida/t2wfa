@@ -1,5 +1,11 @@
 import {FC} from "react";
-import {Card, CardHeader, CardTitle, CardContent} from "@/components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardDescription,
+} from "@/components/ui/card";
 import {ExpandableText} from "@/components/ui/expandable-text";
 import Cookie from "@/lib/cookie";
 import Hooks from "@/lib/hooks";
@@ -18,6 +24,9 @@ const ImageCard: FC = (): JSX.Element => {
         <CardTitle className="text-3xl text-white text-center">
           Astronomy Picture of the Day
         </CardTitle>
+        <CardDescription className="text-white text-center">
+          {image.date}
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="relative aspect-square mb-6 overflow-hidden rounded-lg shadow-2xl">
