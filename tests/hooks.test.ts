@@ -30,9 +30,8 @@ describe("テストスタブを用いたテストコード", () => {
           };
         });
 
-        const {result} = renderHook(() =>
-          Hooks.useFetchApodImage("any-api-key")
-        );
+        const date = new Date("2025-02-26");
+        const {result} = renderHook(() => Hooks.useFetchApodImage(date));
 
         // 非同期処理の完了を待つ
         await waitFor(() => {

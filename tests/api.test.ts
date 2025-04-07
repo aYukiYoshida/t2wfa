@@ -32,24 +32,42 @@ describe("テストスパイを用いたテストコードの例", () => {
   });
 
   describe("Api.getApodImage", () => {
-    describe("APIキーを指定した場合", () => {
-      it("指定したAPIキーでAPODの画像の情報が取得される", async ({expect}) => {
-        const fetchSpy = arrangeFetchSpy();
-        await Api.getApodImage("SPECIFIED_KEY");
-        expect(fetchSpy).toHaveBeenCalledTimes(1);
-        expect(fetchSpy).toHaveBeenCalledWith(
-          "https://api.nasa.gov/planetary/apod?api_key=SPECIFIED_KEY"
-        );
+    describe("クエリパラメータ: APIキー", () => {
+      describe("指定した場合", () => {
+        it("指定したAPIキーでAPODの画像の情報が取得される", async ({
+          expect,
+        }) => {
+          const fetchSpy = arrangeFetchSpy();
+          await Api.getApodImage({key: "SPECIFIED_KEY"});
+          expect(fetchSpy).toHaveBeenCalledTimes(1);
+          expect(fetchSpy).toHaveBeenCalledWith(
+            "https://api.nasa.gov/planetary/apod?api_key=SPECIFIED_KEY"
+          );
+        });
+      });
+      describe("指定しない場合", () => {
+        it("デモ用のAPIキーでAPODの画像の情報が取得される", async ({
+          expect,
+        }) => {
+          const fetchSpy = arrangeFetchSpy();
+          await Api.getApodImage();
+          expect(fetchSpy).toHaveBeenCalledTimes(1);
+          expect(fetchSpy).toHaveBeenCalledWith(
+            "https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY"
+          );
+        });
       });
     });
-    describe("APIキーを指定しない場合", () => {
-      it("デモ用のAPIキーでAPODの画像の情報が取得される", async ({expect}) => {
-        const fetchSpy = arrangeFetchSpy();
-        await Api.getApodImage(null);
-        expect(fetchSpy).toHaveBeenCalledTimes(1);
-        expect(fetchSpy).toHaveBeenCalledWith(
-          "https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY"
-        );
+    describe("クエリパラメータ: 日付", () => {
+      describe("指定した場合", () => {
+        it("指定した日付でAPODの画像の情報が取得される", async ({expect}) => {
+          const fetchSpy = arrangeFetchSpy();
+          await Api.getApodImage({date: "2025-04-07"});
+          expect(fetchSpy).toHaveBeenCalledTimes(1);
+          expect(fetchSpy).toHaveBeenCalledWith(
+            "https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&date=2025-04-07"
+          );
+        });
       });
     });
   });
@@ -112,7 +130,7 @@ describe("フェイクオブジェクトを用いたテストコードの例", (
     describe("APIキーを指定した場合", () => {
       describe("有効なAPIキーを指定した場合", () => {
         it("APODの画像情報の取得が成功する", async ({expect}) => {
-          const apodImage = await Api.getApodImage("VALID_KEY");
+          const apodImage = await Api.getApodImage({key: "VALID_KEY"});
           expect(apodImage).toEqual({
             copyright: "copyright",
             date: "2025-02-26",
@@ -128,15 +146,15 @@ describe("フェイクオブジェクトを用いたテストコードの例", (
       });
       describe("無効なAPIキーを指定した場合", () => {
         it("APODの画像情報の取得が失敗する", async ({expect}) => {
-          await expect(Api.getApodImage("INVALID_KEY")).rejects.toThrowError(
-            "Failed to fetch data: 403 Forbidden"
-          );
+          await expect(
+            Api.getApodImage({key: "INVALID_KEY"})
+          ).rejects.toThrowError("Failed to fetch data: 403 Forbidden");
         });
       });
     });
     describe("APIキーを指定しない場合", () => {
       it("APODの画像情報の取得が成功する", async ({expect}) => {
-        const apodImage = await Api.getApodImage(null);
+        const apodImage = await Api.getApodImage();
         expect(apodImage).toEqual({
           copyright: "copyright",
           date: "2025-02-26",
