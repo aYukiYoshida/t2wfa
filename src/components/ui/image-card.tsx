@@ -7,12 +7,10 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import {ExpandableText} from "@/components/ui/expandable-text";
-import Cookie from "@/lib/cookie";
 import Hooks from "@/lib/hooks";
 
 const ImageCard: FC = (): JSX.Element => {
-  const apiKey = Cookie.getCookie("key");
-  const {image, loading, error} = Hooks.useFetchApodImage(apiKey);
+  const {image, loading, error} = Hooks.useFetchApodImage();
 
   if (loading) return <p className="text-white">Loading...</p>;
   if (!image || error)
