@@ -1,7 +1,7 @@
 import {useState, FC, Dispatch} from "react";
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
-import Cookie from "@/lib/cookie";
+import {useAuthStore} from "@/lib/store";
 
 type InputKeyProps = {
   setShowImageCard: Dispatch<boolean>;
@@ -9,13 +9,14 @@ type InputKeyProps = {
 
 const InputKey: FC<InputKeyProps> = ({setShowImageCard}): JSX.Element => {
   const [inputKeyValue, setInputKeyValue] = useState<string>("");
+  const setToken = useAuthStore((state) => state.setToken);
 
   const handleInputKeyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputKeyValue(event.target.value);
   };
 
   const handleSaveKeyClick = () => {
-    Cookie.setCookie("key", inputKeyValue);
+    setToken(inputKeyValue);
     setShowImageCard(true);
   };
 
