@@ -62,7 +62,8 @@ describe("テストスパイを用いたテストコードの例", () => {
       describe("指定した場合", () => {
         it("指定した日付でAPODの画像の情報が取得される", async ({expect}) => {
           const fetchSpy = arrangeFetchSpy();
-          await Api.getApodImage({date: "2025-04-07"});
+          const date = new Date("2025-04-07");
+          await Api.getApodImage({date});
           expect(fetchSpy).toHaveBeenCalledTimes(1);
           expect(fetchSpy).toHaveBeenCalledWith(
             "https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&date=2025-04-07"

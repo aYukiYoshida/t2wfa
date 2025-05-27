@@ -1,17 +1,18 @@
-import {parse, isValid} from "date-fns";
+import {format, isValid} from "date-fns";
 
 import {ApodImageResponse} from "@/lib/types";
 
 const baseUrl = "https://api.nasa.gov/planetary/apod";
 
 async function getApodImage(
-  options: {key?: string; date?: string} = {}
+  options: {key?: string; date?: Date} = {}
 ): Promise<ApodImageResponse> {
   const params: {api_key?: string; date?: string} = {};
   params.api_key = options.key !== undefined ? options.key : "DEMO_KEY";
   if (options.date) {
-    const parsedDate = parse(options.date, "yyyy-MM-dd", new Date());
-    params.date = isValid(parsedDate) ? options.date : undefined;
+    params.date = isValid(options.date)
+      ? format(options.date, "yyyy-MM-dd")
+      : undefined;
   }
   const filteredParams = Object.fromEntries(
     Object.entries(params).filter(([, v]) => v !== null && v !== undefined)
