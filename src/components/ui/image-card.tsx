@@ -7,6 +7,7 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import {ExpandableText} from "@/components/ui/expandable-text";
+import {DatePickerDialog} from "@/components/ui/date-picker-dialog";
 import Hooks from "@/lib/hooks";
 
 const ImageCard: FC = (): JSX.Element => {
@@ -25,6 +26,7 @@ const ImageCard: FC = (): JSX.Element => {
         <CardDescription className="text-white text-center">
           {image.date}
         </CardDescription>
+        <DatePickerDialog />
       </CardHeader>
       <CardContent>
         <div className="relative aspect-square mb-6 overflow-hidden rounded-lg shadow-2xl">
