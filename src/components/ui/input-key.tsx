@@ -1,13 +1,9 @@
-import {useState, FC, Dispatch} from "react";
+import {useState, FC} from "react";
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import {useAuthStore} from "@/lib/store";
 
-type InputKeyProps = {
-  setShowImageCard: Dispatch<boolean>;
-};
-
-const InputKey: FC<InputKeyProps> = ({setShowImageCard}): JSX.Element => {
+const InputKey: FC = (): JSX.Element => {
   const [inputKeyValue, setInputKeyValue] = useState<string>("");
   const setToken = useAuthStore((state) => state.setToken);
 
@@ -17,7 +13,6 @@ const InputKey: FC<InputKeyProps> = ({setShowImageCard}): JSX.Element => {
 
   const handleSaveKeyClick = () => {
     setToken(inputKeyValue);
-    setShowImageCard(true);
   };
 
   return (
