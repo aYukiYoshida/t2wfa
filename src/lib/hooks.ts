@@ -19,6 +19,7 @@ const useFetchApodImage = () => {
           date,
         });
         setImage(imageResponse);
+        setError(null);
       } catch (err) {
         setError(err as Error);
       } finally {

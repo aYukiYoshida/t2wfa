@@ -90,6 +90,66 @@ describe("Hooks.useFetchApodImage", () => {
       });
     });
 
+    describe("取得に失敗した後に取得が成功した場合", () => {
+      it("画像の情報が返る", async ({expect}) => {
+        // テストスタブ(テスト対象への間接入力を操作するテストダブル)の定義
+        // テスト対象である useFetchApodImage の間接入力を事前に設定して使用する
+        // ここで useFetchApodImage の間接入力は内部で実行する getApodImage の戻り値である
+        // ここでは getApodImage を差し替える戻り値を指定したテストスタブを定義する
+        vi.spyOn(Api, "getApodImage")
+          .mockImplementationOnce(() => {
+            throw new Error("API Error");
+          })
+          .mockResolvedValue({
+            title: "Einstein Ring Surrounds Nearby Galaxy Center",
+            explanation: "explanation",
+            copyright: "copyright",
+            media_type: "image",
+            hdurl:
+              "https://apod.nasa.gov/apod/image/2502/ClusterRing_Euclid_2665.jpg",
+            url: "https://apod.nasa.gov/apod/image/2502/ClusterRing_Euclid_960.jpg",
+            service_version: "v1",
+            date: "2025-02-26",
+          });
+
+        // 初回は失敗する
+        const {result: resultFirst} = renderHook(() =>
+          Hooks.useFetchApodImage()
+        );
+
+        // 非同期処理の完了を待つ
+        await waitFor(() => {
+          expect(resultFirst.current.loading).not.toBeTruthy();
+        });
+        expect(resultFirst.current.image).toBe(undefined);
+        expect(resultFirst.current.loading).toBe(false);
+        expect(resultFirst.current.error).toEqual(new Error("API Error"));
+
+        // 再度フックを呼び出すと成功する
+        const {result: resultSecond} = renderHook(() =>
+          Hooks.useFetchApodImage()
+        );
+
+        // 非同期処理の完了を待つ
+        await waitFor(() => {
+          expect(resultFirst.current.loading).not.toBeTruthy();
+        });
+        expect(resultSecond.current.image).toEqual({
+          copyright: "copyright",
+          date: "2025-02-26",
+          explanation: "explanation",
+          hdurl:
+            "https://apod.nasa.gov/apod/image/2502/ClusterRing_Euclid_2665.jpg",
+          media_type: "image",
+          service_version: "v1",
+          title: "Einstein Ring Surrounds Nearby Galaxy Center",
+          url: "https://apod.nasa.gov/apod/image/2502/ClusterRing_Euclid_960.jpg",
+        });
+        expect(resultSecond.current.loading).toBe(false);
+        expect(resultSecond.current.error).toBeNull();
+      });
+    });
+
     describe("日付の選択", () => {
       it("選択した日付の画像の情報が取得される", async ({expect}) => {
         const getApodImageSpy = arrangeGetApodImageSpy();
