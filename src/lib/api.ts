@@ -1,6 +1,7 @@
 import {format, isValid} from "date-fns";
 
 import {ApodImageResponse} from "@/lib/types";
+import {getUTCDate} from "@/lib/utils";
 
 const baseUrl = "https://api.nasa.gov/planetary/apod";
 
@@ -10,9 +11,8 @@ async function getApodImage(
   const params: {api_key?: string; date?: string} = {};
   params.api_key = options.key !== undefined ? options.key : "DEMO_KEY";
   if (options.date) {
-    params.date = isValid(options.date)
-      ? format(options.date, "yyyy-MM-dd")
-      : undefined;
+    const utcDate = getUTCDate(options.date);
+    params.date = isValid(utcDate) ? format(utcDate, "yyyy-MM-dd") : undefined;
   }
   const filteredParams = Object.fromEntries(
     Object.entries(params).filter(([, v]) => v !== null && v !== undefined)

@@ -13,6 +13,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import {useDateStore} from "@/lib/store";
+import {getUTCDate} from "@/lib/utils";
 
 export function DatePickerDialog(): JSX.Element {
   const {date, setDate} = useDateStore();
@@ -42,7 +43,7 @@ export function DatePickerDialog(): JSX.Element {
               setOpen(false);
             }}
             disabled={(date) =>
-              date > new Date() || date < new Date("1900-01-01")
+              date > getUTCDate() || date < new Date("1995-06-16")
             }
             className="rdp-root"
           />
@@ -52,7 +53,7 @@ export function DatePickerDialog(): JSX.Element {
             className="text-white"
             variant="ghost"
             onClick={() => {
-              setDate(new Date());
+              setDate(getUTCDate());
               setOpen(false);
             }}
           >
