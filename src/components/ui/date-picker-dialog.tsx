@@ -12,9 +12,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {useDateStore} from "@/lib/store";
 
 export function DatePickerDialog(): JSX.Element {
-  const [date, setDate] = useState<Date>();
+  const {date, setDate} = useDateStore();
   const [open, setOpen] = useState<boolean>(false);
 
   return (

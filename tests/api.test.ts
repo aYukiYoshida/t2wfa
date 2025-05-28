@@ -128,10 +128,35 @@ describe("フェイクオブジェクトを用いたテストコードの例", (
   afterEach(() => server.resetHandlers());
 
   describe("Api.getApodImage", () => {
-    describe("APIキーを指定した場合", () => {
-      describe("有効なAPIキーを指定した場合", () => {
+    describe("クエリパラメータ: APIキー", () => {
+      describe("指定する場合", () => {
+        describe("有効なAPIキーの場合", () => {
+          it("APODの画像情報の取得が成功する", async ({expect}) => {
+            const apodImage = await Api.getApodImage({key: "VALID_KEY"});
+            expect(apodImage).toEqual({
+              copyright: "copyright",
+              date: "2025-02-26",
+              explanation: "explanation",
+              hdurl:
+                "https://apod.nasa.gov/apod/image/2502/ClusterRing_Euclid_2665.jpg",
+              media_type: "image",
+              service_version: "v1",
+              title: "Einstein Ring Surrounds Nearby Galaxy Center",
+              url: "https://apod.nasa.gov/apod/image/2502/ClusterRing_Euclid_960.jpg",
+            });
+          });
+        });
+        describe("無効なAPIキーの場合", () => {
+          it("APODの画像情報の取得が失敗する", async ({expect}) => {
+            await expect(
+              Api.getApodImage({key: "INVALID_KEY"})
+            ).rejects.toThrowError("Failed to fetch data: 403 Forbidden");
+          });
+        });
+      });
+      describe("指定しない場合", () => {
         it("APODの画像情報の取得が成功する", async ({expect}) => {
-          const apodImage = await Api.getApodImage({key: "VALID_KEY"});
+          const apodImage = await Api.getApodImage();
           expect(apodImage).toEqual({
             copyright: "copyright",
             date: "2025-02-26",
@@ -143,29 +168,6 @@ describe("フェイクオブジェクトを用いたテストコードの例", (
             title: "Einstein Ring Surrounds Nearby Galaxy Center",
             url: "https://apod.nasa.gov/apod/image/2502/ClusterRing_Euclid_960.jpg",
           });
-        });
-      });
-      describe("無効なAPIキーを指定した場合", () => {
-        it("APODの画像情報の取得が失敗する", async ({expect}) => {
-          await expect(
-            Api.getApodImage({key: "INVALID_KEY"})
-          ).rejects.toThrowError("Failed to fetch data: 403 Forbidden");
-        });
-      });
-    });
-    describe("APIキーを指定しない場合", () => {
-      it("APODの画像情報の取得が成功する", async ({expect}) => {
-        const apodImage = await Api.getApodImage();
-        expect(apodImage).toEqual({
-          copyright: "copyright",
-          date: "2025-02-26",
-          explanation: "explanation",
-          hdurl:
-            "https://apod.nasa.gov/apod/image/2502/ClusterRing_Euclid_2665.jpg",
-          media_type: "image",
-          service_version: "v1",
-          title: "Einstein Ring Surrounds Nearby Galaxy Center",
-          url: "https://apod.nasa.gov/apod/image/2502/ClusterRing_Euclid_960.jpg",
         });
       });
     });

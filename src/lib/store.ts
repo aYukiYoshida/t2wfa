@@ -26,3 +26,13 @@ export const useAuthStore = create<AuthState>((set) => {
     },
   };
 });
+
+export type DateState = {
+  date: Date | undefined; // 現在の日付
+  setDate: (date: Date | undefined) => void; // 日付を設定
+};
+
+export const useDateStore = create<DateState>((set) => ({
+  date: undefined, // 初期状態は未設定
+  setDate: (date) => set({date}), // 日付を設定する関数
+}));
