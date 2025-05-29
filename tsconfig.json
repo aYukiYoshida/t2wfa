@@ -6,7 +6,7 @@
   ],
   "compilerOptions": {
     "baseUrl": ".",
-    "types": ["vitest/globals"],
+    "types": ["vitest/globals", "@vitest/browser/providers/playwright"],
     "paths": {
       "@/*": ["./src/*"]
     }
