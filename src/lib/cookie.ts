@@ -38,6 +38,7 @@ export const setTokenToCookie = (
     secure: true,
     sameSite: "Strict",
     maxAge: 3600, // in unit of seconds
+    expires: new Date(Date.now() + 3600 * 1000), // 1時間後に有効期限を設定
   };
 
   // デフォルトオプションと引数で指定されたオプションをマージ
@@ -64,6 +65,6 @@ export const setTokenToCookie = (
 };
 
 export const clearTokenCookie = (): void => {
-  setTokenToCookie("", {expires: new Date(0)}); // 過去の日付を設定してCookieを削除
+  setTokenToCookie("", {maxAge: 0}); // 期限を0に設定してCookieを削除
   console.log(`Cookie Cleared: ${TOKEN_COOKIE_NAME}`);
 };
