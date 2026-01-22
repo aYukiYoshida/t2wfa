@@ -2,8 +2,9 @@ import {act, renderHook, waitFor} from "@testing-library/react";
 import {describe, beforeEach, afterEach, it, vi} from "vitest";
 
 import Api from "@/lib/api";
+import {InvalidApiKeyError} from "@/lib/errors";
 import Hooks from "@/lib/hooks";
-import {useDateStore} from "@/lib/store";
+import {useAuthStore, useDateStore} from "@/lib/store";
 
 describe("Hooks.useFetchApodImage", () => {
   // テストスタブ(テスト対象への間接入力を操作するテストダブル)の定義
@@ -171,6 +172,146 @@ describe("Hooks.useFetchApodImage", () => {
           apiKey: "DEMO_KEY",
           date,
         });
+      });
+    });
+  });
+});
+
+describe("Hooks.useValidateApiKey", () => {
+  beforeEach(() => {
+    // 認証ストアを初期状態にリセット
+    act(() => {
+      useAuthStore.setState({apiKey: "", isApiKeyValid: true});
+    });
+  });
+
+  afterEach(() => {
+    vi.resetAllMocks();
+  });
+
+  describe("APIキーが未入力の場合", () => {
+    it("検証がスキップされる", async ({expect}) => {
+      const getApodImageSpy = vi.spyOn(Api, "getApodImage");
+
+      act(() => {
+        useAuthStore.setState({apiKey: "", isApiKeyValid: null});
+      });
+
+      const {result} = renderHook(() => Hooks.useValidateApiKey());
+
+      expect(result.current.isValidating).toBe(false);
+      expect(getApodImageSpy).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("APIキーが入力済", () => {
+    describe("検証中の場合", () => {
+      it("検証状態が検証中になる", async ({expect}) => {
+        vi.spyOn(Api, "getApodImage").mockResolvedValue({
+          title: "Test",
+          explanation: "Test",
+          copyright: "Test",
+          media_type: "image",
+          hdurl: "https://example.com/image.jpg",
+          url: "https://example.com/image.jpg",
+          service_version: "v1",
+          date: "2025-02-26",
+        });
+
+        act(() => {
+          useAuthStore.setState({apiKey: "test-api-key", isApiKeyValid: null});
+        });
+
+        const {result} = renderHook(() => Hooks.useValidateApiKey());
+
+        // 初期状態では検証中
+        expect(result.current.isValidating).toBe(true);
+
+        // 非同期処理の完了を待つ
+        await waitFor(() => {
+          expect(result.current.isValidating).toBe(false);
+        });
+      });
+    });
+
+    describe("検証に成功した場合", () => {
+      it("検証結果が成功と設定される", async ({expect}) => {
+        const getApodImageSpy = vi
+          .spyOn(Api, "getApodImage")
+          .mockResolvedValue({
+            title: "Test",
+            explanation: "Test",
+            copyright: "Test",
+            media_type: "image",
+            hdurl: "https://example.com/image.jpg",
+            url: "https://example.com/image.jpg",
+            service_version: "v1",
+            date: "2025-02-26",
+          });
+
+        act(() => {
+          useAuthStore.setState({apiKey: "valid-api-key", isApiKeyValid: null});
+        });
+
+        const {result} = renderHook(() => Hooks.useValidateApiKey());
+
+        // 非同期処理の完了を待つ
+        await waitFor(() => {
+          expect(result.current.isValidating).toBe(false);
+        });
+
+        expect(getApodImageSpy).toHaveBeenCalledTimes(1);
+        expect(useAuthStore.getState().isApiKeyValid).toBe(true);
+      });
+    });
+
+    describe("検証に失敗した場合（InvalidApiKeyError）", () => {
+      it("検証結果が失敗と設定される", async ({expect}) => {
+        const getApodImageSpy = vi
+          .spyOn(Api, "getApodImage")
+          .mockRejectedValue(new InvalidApiKeyError());
+
+        act(() => {
+          useAuthStore.setState({
+            apiKey: "invalid-api-key",
+            isApiKeyValid: null,
+          });
+        });
+
+        const {result} = renderHook(() => Hooks.useValidateApiKey());
+
+        // 非同期処理の完了を待つ
+        await waitFor(() => {
+          expect(result.current.isValidating).toBe(false);
+        });
+
+        expect(getApodImageSpy).toHaveBeenCalledTimes(1);
+        expect(useAuthStore.getState().isApiKeyValid).toBe(false);
+      });
+    });
+
+    describe("その他のエラーが発生した場合", () => {
+      it("検証結果が有効として扱われる", async ({expect}) => {
+        const getApodImageSpy = vi
+          .spyOn(Api, "getApodImage")
+          .mockRejectedValue(new Error("Network Error"));
+
+        act(() => {
+          useAuthStore.setState({
+            apiKey: "some-api-key",
+            isApiKeyValid: null,
+          });
+        });
+
+        const {result} = renderHook(() => Hooks.useValidateApiKey());
+
+        // 非同期処理の完了を待つ
+        await waitFor(() => {
+          expect(result.current.isValidating).toBe(false);
+        });
+
+        expect(getApodImageSpy).toHaveBeenCalledTimes(1);
+        expect(useAuthStore.getState().isApiKeyValid).toBe(true);
       });
     });
   });

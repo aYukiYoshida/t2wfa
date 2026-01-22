@@ -22,6 +22,7 @@ const useFetchApodImage = () => {
           date,
         });
         setImage(imageResponse);
+        setApiKeyValid(true); // API検証成功
         setError(null);
       } catch (err) {
         if (err instanceof InvalidApiKeyError) {
@@ -40,4 +41,35 @@ const useFetchApodImage = () => {
   return {image, loading, error};
 };
 
-export default {useFetchApodImage};
+const useValidateApiKey = () => {
+  const apiKey = useAuthStore((state) => state.apiKey);
+  const isApiKeyValid = useAuthStore((state) => state.isApiKeyValid);
+  const setApiKeyValid = useAuthStore((state) => state.setApiKeyValid);
+  const isValidating = isApiKeyValid === null && apiKey !== "";
+
+  useEffect(() => {
+    if (isApiKeyValid !== null || apiKey === "") {
+      return;
+    }
+
+    const validateApiKey = async () => {
+      try {
+        await Api.getApodImage({apiKey});
+        setApiKeyValid(true);
+      } catch (err) {
+        if (err instanceof InvalidApiKeyError) {
+          setApiKeyValid(false);
+        } else {
+          // その他のエラーの場合は有効として扱う（一時的なエラーとみなす）
+          setApiKeyValid(true);
+        }
+      }
+    };
+
+    validateApiKey();
+  }, [apiKey, isApiKeyValid, setApiKeyValid]);
+
+  return {isValidating};
+};
+
+export default {useFetchApodImage, useValidateApiKey};
