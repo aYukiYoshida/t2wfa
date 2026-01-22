@@ -8,11 +8,11 @@ const Content: FC = (): JSX.Element => {
   const apiKey = useAuthStore((state) => state.apiKey);
   const isApiKeyValid = useAuthStore((state) => state.isApiKeyValid);
 
-  return apiKey !== "" && isApiKeyValid ? (
+  return apiKey !== "" && isApiKeyValid === true ? (
     <ImageContent />
   ) : (
-    // APIキーがあっても無効な場合は再入力画面を表示
-    <InputKey showInvalidMessage={!isApiKeyValid} />
+    // APIキーがあっても無効または検証中の場合は入力画面を表示
+    <InputKey showInvalidMessage={isApiKeyValid === false} />
   );
 };
 

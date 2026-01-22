@@ -1,8 +1,10 @@
+import {Loader2} from "lucide-react";
 import {useRef, FC} from "react";
 
 import {Button} from "@/components/ui/button";
 import {CardContent} from "@/components/ui/card";
 import {Input} from "@/components/ui/input";
+import Hooks from "@/lib/hooks";
 import {useAuthStore} from "@/lib/store";
 
 type InputKeyProps = {
@@ -14,6 +16,9 @@ const InputKey: FC<InputKeyProps> = ({
 }): JSX.Element => {
   const inputApiKey = useRef<HTMLInputElement>(null);
   const setApiKey = useAuthStore((state) => state.setApiKey);
+
+  // APIキーの検証を行う
+  const {isValidating} = Hooks.useValidateApiKey();
 
   const handleSaveKeyClick = () => {
     if (inputApiKey.current) {
@@ -33,9 +38,17 @@ const InputKey: FC<InputKeyProps> = ({
           />
           <Button
             onClick={handleSaveKeyClick}
+            disabled={isValidating}
             className="bg-gray-400 background rounded-md hover:bg-gray-700"
           >
-            Save
+            {isValidating ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                Validating...
+              </>
+            ) : (
+              "Save"
+            )}
           </Button>
         </div>
         {showInvalidMessage && (

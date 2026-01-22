@@ -13,7 +13,7 @@ const Header: FC = (): JSX.Element => {
       <CardTitle className="text-3xl text-center">
         Astronomy Picture of the Day
       </CardTitle>
-      {apiKey !== "" && isApiKeyValid && <DatePickerDialog />}
+      {apiKey !== "" && isApiKeyValid === true && <DatePickerDialog />}
     </CardHeader>
   );
 };
