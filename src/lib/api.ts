@@ -5,15 +5,23 @@ import {getUTCDate} from "@/lib/utils";
 
 const baseUrl = "https://api.nasa.gov/planetary/apod";
 
+function getApodDate(date: Date): string {
+  const utcDate = getUTCDate(date);
+  if (isValid(date)) {
+    return format(utcDate, "yyyy-MM-dd");
+  } else {
+    const utcNow = getUTCDate();
+    return format(utcNow, "yyyy-MM-dd");
+  }
+}
+
 async function getApodImage(
   options: {key?: string; date?: Date} = {}
 ): Promise<ApodImageResponse> {
-  const params: {api_key?: string; date?: string} = {};
-  params.api_key = options.key !== undefined ? options.key : "DEMO_KEY";
-  if (options.date) {
-    const utcDate = getUTCDate(options.date);
-    params.date = isValid(utcDate) ? format(utcDate, "yyyy-MM-dd") : undefined;
-  }
+  const params: {api_key?: string; date?: string} = {
+    api_key: options.key !== undefined ? options.key : "DEMO_KEY",
+    date: options.date ? getApodDate(options.date) : undefined,
+  };
   const filteredParams = Object.fromEntries(
     Object.entries(params).filter(([, v]) => v !== null && v !== undefined)
   );
