@@ -3,6 +3,7 @@ import {FC} from "react";
 import {CardContent} from "@/components/ui/card";
 import {ExpandableText} from "@/components/ui/expandable-text";
 import {MessageText} from "@/components/ui/message-text";
+import {TooManyRequestsError} from "@/lib/errors";
 import Hooks from "@/lib/hooks";
 
 const ImageContent: FC = (): JSX.Element => {
@@ -13,7 +14,11 @@ const ImageContent: FC = (): JSX.Element => {
       {loading ? (
         <MessageText>Loading...</MessageText>
       ) : error ? (
-        <MessageText>Error: {error.message}</MessageText>
+        error instanceof TooManyRequestsError ? (
+          <MessageText>{error.message}</MessageText>
+        ) : (
+          <MessageText>Error: {error.message}</MessageText>
+        )
       ) : !image ? (
         <MessageText>No image available</MessageText>
       ) : (

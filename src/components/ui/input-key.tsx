@@ -18,7 +18,7 @@ const InputKey: FC<InputKeyProps> = ({
   const setApiKey = useAuthStore((state) => state.setApiKey);
 
   // APIキーの検証を行う
-  const {isValidating} = Hooks.useValidateApiKey();
+  const {isValidating, error} = Hooks.useValidateApiKey();
 
   const handleSaveKeyClick = () => {
     if (inputApiKey.current) {
@@ -52,7 +52,7 @@ const InputKey: FC<InputKeyProps> = ({
           </Button>
         </div>
         {showInvalidMessage && (
-          <p className="text-red-500 pt-1">Input API key is invalid.</p>
+          <p className="text-red-500 pt-1">{error?.message}</p>
         )}
       </div>
     </CardContent>

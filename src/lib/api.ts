@@ -32,13 +32,11 @@ async function getApodImage(
 
   if (!response.ok) {
     if (response.status === 403) {
-      throw new InvalidApiKeyError(
-        `Invalid API key: ${response.status} ${response.statusText}`
-      );
+      throw new InvalidApiKeyError("Input API key is invalid.");
     }
     if (response.status === 429) {
       throw new TooManyRequestsError(
-        `Too many requests: ${response.status} ${response.statusText}`
+        "You have reached your rate limit. Try again later."
       );
     }
     throw new Error(

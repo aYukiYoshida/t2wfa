@@ -46,6 +46,7 @@ const useValidateApiKey = () => {
   const isApiKeyValid = useAuthStore((state) => state.isApiKeyValid);
   const setApiKeyValid = useAuthStore((state) => state.setApiKeyValid);
   const isValidating = isApiKeyValid === null && apiKey !== "";
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
     if (isApiKeyValid !== null || apiKey === "") {
@@ -56,6 +57,7 @@ const useValidateApiKey = () => {
       try {
         await Api.getApodImage({apiKey});
         setApiKeyValid(true);
+        setError(null);
       } catch (err) {
         if (err instanceof InvalidApiKeyError) {
           setApiKeyValid(false);
@@ -63,13 +65,14 @@ const useValidateApiKey = () => {
           // その他のエラーの場合は有効として扱う（一時的なエラーとみなす）
           setApiKeyValid(true);
         }
+        setError(err as Error);
       }
     };
 
     validateApiKey();
   }, [apiKey, isApiKeyValid, setApiKeyValid]);
 
-  return {isValidating};
+  return {isValidating, error};
 };
 
 export default {useFetchApodImage, useValidateApiKey};

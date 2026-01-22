@@ -150,7 +150,7 @@ describe("フェイクオブジェクトを用いたテストコードの例", (
           it("APODの画像情報の取得が失敗する", async ({expect}) => {
             await expect(
               Api.getApodImage({apiKey: "INVALID_KEY"})
-            ).rejects.toThrowError("Invalid API key: 403 Forbidden");
+            ).rejects.toThrowError("Input API key is invalid.");
           });
         });
       });
@@ -206,7 +206,9 @@ describe("フェイクオブジェクトを用いたテストコードの例", (
         it("APODの画像情報の取得が失敗する", async ({expect}) => {
           await expect(
             Api.getApodImage({apiKey: "DEMO_KEY"})
-          ).rejects.toThrowError("Too many requests: 429 Too Many Requests");
+          ).rejects.toThrowError(
+            "You have reached your rate limit. Try again later."
+          );
         });
       });
     });
