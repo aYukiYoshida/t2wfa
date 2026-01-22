@@ -8,8 +8,10 @@ import {
 
 export type AuthState = {
   token: string | null; // 現在のトークン
+  isTokenValid: boolean; // トークンが有効かどうか（セッションのみ）
   setToken: (token: string) => void; // トークンを設定し、Cookieにも保存
   clearToken: () => void; // トークンをクリアし、Cookieも削除
+  setTokenValid: (isValid: boolean) => void; // トークンの有効性を設定
 };
 
 export const useAuthStore = create<AuthState>((set) => {
@@ -17,14 +19,16 @@ export const useAuthStore = create<AuthState>((set) => {
   const initialToken = getTokenFromCookie();
   return {
     token: initialToken,
+    isTokenValid: true, // 初期状態は有効と仮定（セッションのみ、リロードでリセット）
     setToken: (token) => {
       setTokenToCookie(token);
-      set({token});
+      set({token, isTokenValid: true}); // トークン設定時は有効にリセット
     },
     clearToken: () => {
       clearTokenCookie();
-      set({token: null});
+      set({token: null, isTokenValid: true});
     },
+    setTokenValid: (isValid) => set({isTokenValid: isValid}),
   };
 });
 
