@@ -1,5 +1,6 @@
 import {format, isValid} from "date-fns";
 
+import {InvalidApiKeyError} from "@/lib/errors";
 import {ApodImageResponse} from "@/lib/types";
 import {getUTCDate} from "@/lib/utils";
 
@@ -30,6 +31,11 @@ async function getApodImage(
   const response = await fetch(`${baseUrl}?${query}`);
 
   if (!response.ok) {
+    if (response.status === 403) {
+      throw new InvalidApiKeyError(
+        `Invalid API key: ${response.status} ${response.statusText}`
+      );
+    }
     throw new Error(
       `Failed to fetch data: ${response.status} ${response.statusText}`
     );

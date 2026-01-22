@@ -150,7 +150,7 @@ describe("フェイクオブジェクトを用いたテストコードの例", (
           it("APODの画像情報の取得が失敗する", async ({expect}) => {
             await expect(
               Api.getApodImage({key: "INVALID_KEY"})
-            ).rejects.toThrowError("Failed to fetch data: 403 Forbidden");
+            ).rejects.toThrowError("Invalid API key: 403 Forbidden");
           });
         });
       });
