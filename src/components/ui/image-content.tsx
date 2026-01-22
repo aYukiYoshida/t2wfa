@@ -11,9 +11,9 @@ const ImageContent: FC = (): JSX.Element => {
   return (
     <CardContent>
       {loading ? (
-        <MessageText text="Loading..." />
+        <MessageText>Loading...</MessageText>
       ) : !image || error ? (
-        <MessageText text={`Error: ${error?.message}`} />
+        <MessageText>Error: ${error?.message}</MessageText>
       ) : (
         <>
           <div className="relative aspect-square mb-6 overflow-hidden rounded-lg shadow-2xl">

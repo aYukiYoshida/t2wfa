@@ -1,13 +1,13 @@
-import {FC} from "react";
+import {FC, ReactNode} from "react";
 
 type MessageTextProps = {
-  text: string;
+  children: ReactNode;
 };
 
-const MessageText: FC<MessageTextProps> = ({text}): JSX.Element => {
+const MessageText: FC<MessageTextProps> = ({children}): JSX.Element => {
   return (
     <div className="max-w-sm">
-      <p className="text-white text-center">{text}</p>
+      <p className="text-white text-center">{children}</p>
     </div>
   );
 };
