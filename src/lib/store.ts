@@ -8,10 +8,10 @@ import {
 
 export type AuthState = {
   apiKey: string; // 現在のAPIキー
-  isApiKeyValid: boolean; // APIキーが有効かどうか（セッションのみ）
+  isApiKeyValid: boolean | null; // APIキーが有効かどうか（null = 検証中）
   setApiKey: (apiKey: string) => void; // APIキーを設定し、Cookieにも保存
   clearApiKey: () => void; // APIキーをクリアし、Cookieも削除
-  setApiKeyValid: (isValid: boolean) => void; // APIキーの有効性を設定
+  setApiKeyValid: (isValid: boolean | null) => void; // APIキーの有効性を設定
 };
 
 export const useAuthStore = create<AuthState>((set) => {
@@ -22,7 +22,7 @@ export const useAuthStore = create<AuthState>((set) => {
     isApiKeyValid: true, // 初期状態は有効と仮定（セッションのみ、リロードでリセット）
     setApiKey: (apiKey) => {
       setApiKeyToCookie(apiKey);
-      set({apiKey, isApiKeyValid: true}); // APIキー設定時は有効にリセット
+      set({apiKey, isApiKeyValid: null}); // APIキー設定時は検証中の状態にする
     },
     clearApiKey: () => {
       clearApiKeyCookie();
