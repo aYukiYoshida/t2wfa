@@ -5,3 +5,11 @@ export class InvalidApiKeyError extends Error {
     this.name = "InvalidApiKeyError";
   }
 }
+
+// 429エラー時に投げる専用エラークラス
+export class TooManyRequestsError extends Error {
+  constructor(message = "Too many requests") {
+    super(message);
+    this.name = "TooManyRequestsError";
+  }
+}

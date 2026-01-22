@@ -1,6 +1,6 @@
 import {format, isValid} from "date-fns";
 
-import {InvalidApiKeyError} from "@/lib/errors";
+import {InvalidApiKeyError, TooManyRequestsError} from "@/lib/errors";
 import {ApodImageResponse} from "@/lib/types";
 import {getUTCDate} from "@/lib/utils";
 
@@ -34,6 +34,11 @@ async function getApodImage(
     if (response.status === 403) {
       throw new InvalidApiKeyError(
         `Invalid API key: ${response.status} ${response.statusText}`
+      );
+    }
+    if (response.status === 429) {
+      throw new TooManyRequestsError(
+        `Too many requests: ${response.status} ${response.statusText}`
       );
     }
     throw new Error(

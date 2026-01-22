@@ -75,60 +75,60 @@ describe("テストスパイを用いたテストコードの例", () => {
 });
 
 describe("フェイクオブジェクトを用いたテストコードの例", () => {
-  // フェイクオブジェクトは、代替する対象と同じように振る舞うテストダブルである
-  // ここでは APOD API をフェイクオブジェクトとして定義する
-  const apodApiFake = [
-    // Intercept "GET https://api.nasa.gov/planetary/apod" requests...
-    http.get("https://api.nasa.gov/planetary/apod", ({request}) => {
-      // Construct a URL instance out of the intercepted request.
-      const url = new URL(request.url);
-      const apiKey = url.searchParams.get("api_key");
-      if (apiKey === "VALID_KEY" || apiKey === "DEMO_KEY") {
-        // ...and respond to them using this JSON response.
-        return HttpResponse.json(
-          {
-            copyright: "copyright",
-            date: "2025-02-26",
-            explanation: "explanation",
-            hdurl:
-              "https://apod.nasa.gov/apod/image/2502/ClusterRing_Euclid_2665.jpg",
-            media_type: "image",
-            service_version: "v1",
-            title: "Einstein Ring Surrounds Nearby Galaxy Center",
-            url: "https://apod.nasa.gov/apod/image/2502/ClusterRing_Euclid_960.jpg",
-          },
-          {status: 200}
-        );
-      } else {
-        return HttpResponse.json(
-          {
-            error: {
-              code: "API_KEY_INVALID",
-              message:
-                "An invalid api_key was supplied. Get one at https://api.nasa.gov:443",
-            },
-          },
-          {
-            status: 403,
-          }
-        );
-      }
-    }),
-  ];
-
-  const server = setupServer(...apodApiFake);
-
-  // Start server before all tests
-  beforeAll(() => server.listen({onUnhandledRequest: "error"}));
-
-  // Close server after all tests
-  afterAll(() => server.close());
-
-  // Reset handlers after each test for test isolation
-  afterEach(() => server.resetHandlers());
-
   describe("Api.getApodImage", () => {
     describe("クエリパラメータ: APIキー", () => {
+      // フェイクオブジェクトは、代替する対象と同じように振る舞うテストダブルである
+      // ここでは APOD API をフェイクオブジェクトとして定義する
+      const apodApiFake = [
+        // Intercept "GET https://api.nasa.gov/planetary/apod" requests...
+        http.get("https://api.nasa.gov/planetary/apod", ({request}) => {
+          // Construct a URL instance out of the intercepted request.
+          const url = new URL(request.url);
+          const apiKey = url.searchParams.get("api_key");
+          if (apiKey === "VALID_KEY" || apiKey === "DEMO_KEY") {
+            // ...and respond to them using this JSON response.
+            return HttpResponse.json(
+              {
+                copyright: "copyright",
+                date: "2025-02-26",
+                explanation: "explanation",
+                hdurl:
+                  "https://apod.nasa.gov/apod/image/2502/ClusterRing_Euclid_2665.jpg",
+                media_type: "image",
+                service_version: "v1",
+                title: "Einstein Ring Surrounds Nearby Galaxy Center",
+                url: "https://apod.nasa.gov/apod/image/2502/ClusterRing_Euclid_960.jpg",
+              },
+              {status: 200}
+            );
+          } else {
+            return HttpResponse.json(
+              {
+                error: {
+                  code: "API_KEY_INVALID",
+                  message:
+                    "An invalid api_key was supplied. Get one at https://api.nasa.gov:443",
+                },
+              },
+              {
+                status: 403,
+              }
+            );
+          }
+        }),
+      ];
+
+      const server = setupServer(...apodApiFake);
+
+      // Start server before all tests
+      beforeAll(() => server.listen({onUnhandledRequest: "error"}));
+
+      // Close server after all tests
+      afterAll(() => server.close());
+
+      // Reset handlers after each test for test isolation
+      afterEach(() => server.resetHandlers());
+
       describe("指定する場合", () => {
         describe("有効なAPIキーの場合", () => {
           it("APODの画像情報の取得が成功する", async ({expect}) => {
@@ -168,6 +168,45 @@ describe("フェイクオブジェクトを用いたテストコードの例", (
             title: "Einstein Ring Surrounds Nearby Galaxy Center",
             url: "https://apod.nasa.gov/apod/image/2502/ClusterRing_Euclid_960.jpg",
           });
+        });
+      });
+    });
+
+    describe("クエリパラメータ: APIキー", () => {
+      const apodApiFake = [
+        // Intercept "GET https://api.nasa.gov/planetary/apod" requests...
+        http.get("https://api.nasa.gov/planetary/apod", () => {
+          return HttpResponse.json(
+            {
+              error: {
+                code: "OVER_RATE_LIMIT",
+                message:
+                  "You have exceeded your rate limit. Try again later or contact us at https://api.nasa.gov:443/contact/ for assistance",
+              },
+            },
+            {
+              status: 429,
+            }
+          );
+        }),
+      ];
+
+      const server = setupServer(...apodApiFake);
+
+      // Start server before all tests
+      beforeAll(() => server.listen({onUnhandledRequest: "error"}));
+
+      // Close server after all tests
+      afterAll(() => server.close());
+
+      // Reset handlers after each test for test isolation
+      afterEach(() => server.resetHandlers());
+
+      describe("アクセス制限の場合", () => {
+        it("APODの画像情報の取得が失敗する", async ({expect}) => {
+          await expect(
+            Api.getApodImage({apiKey: "DEMO_KEY"})
+          ).rejects.toThrowError("Too many requests: 429 Too Many Requests");
         });
       });
     });
