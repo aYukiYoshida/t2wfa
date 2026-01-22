@@ -5,7 +5,10 @@ import {useAuthStore} from "@/lib/store";
 
 function App() {
   const token = useAuthStore((state) => state.token);
-  if (token !== null && token !== "") {
+  const isApiKeyValid = useAuthStore((state) => state.isTokenValid);
+
+  // トークンがあっても無効キーの場合は再入力画面を表示
+  if (token !== null && token !== "" && isApiKeyValid) {
     return (
       <Background className="items-start">
         <ImageCard />
@@ -14,7 +17,7 @@ function App() {
   } else {
     return (
       <Background className="items-center">
-        <InputKey />
+        <InputKey showInvalidMessage={!isApiKeyValid} />
       </Background>
     );
   }
