@@ -2,7 +2,7 @@ import {FC} from "react";
 
 import {Card, CardHeader, CardTitle, CardContent} from "@/components/ui/card";
 import {DatePickerDialog} from "@/components/ui/date-picker-dialog";
-import {ExpandableText} from "@/components/ui/expandable-text";
+import {ImageContent} from "@/components/ui/image-content";
 import {MessageText} from "@/components/ui/message-text";
 import Hooks from "@/lib/hooks";
 
@@ -23,20 +23,7 @@ const ImageCard: FC = (): JSX.Element => {
         ) : !image || error ? (
           <MessageText text={`Error: ${error?.message}`} />
         ) : (
-          <>
-            <div className="relative aspect-square mb-6 overflow-hidden rounded-lg shadow-2xl">
-              <img
-                src={image.url}
-                alt="Cover"
-                className="w-full h-full object-cover transition-transform duration-500 ease-out hover:scale-110"
-              />
-            </div>
-            <div className="text-center mb-2">
-              <h2 className="text-2xl font-bold m-1">{image.title}</h2>
-              <p className="text-gray-400">&copy; {image.copyright}</p>
-            </div>
-            <ExpandableText text={image.explanation}></ExpandableText>
-          </>
+          <ImageContent image={image} />
         )}
       </CardContent>
     </Card>
