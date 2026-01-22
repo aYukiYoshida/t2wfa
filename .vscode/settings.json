@@ -19,4 +19,12 @@
             "source.fixAll.eslint": "explicit"
         }
     },
+    "json.schemas": [
+        {
+            "fileMatch": [
+                ".github/workflows/*.yml"
+            ],
+            "url": "https://www.schemastore.org/github-workflow.json"
+        },
+    ],
 }
