@@ -40,7 +40,7 @@ const ImageContent: FC = (): JSX.Element => {
             <h2 className="text-2xl font-bold m-1">{image.title}</h2>
             <p className="text-gray-400">&copy; {image.copyright}</p>
           </div>
-          <ExpandableText text={image.explanation}></ExpandableText>
+          <ExpandableText>{image.explanation}</ExpandableText>
         </>
       )}
     </CardContent>
