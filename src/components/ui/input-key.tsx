@@ -1,4 +1,4 @@
-import {useState, FC} from "react";
+import {useRef, FC} from "react";
 
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
@@ -11,15 +11,13 @@ type InputKeyProps = {
 const InputKey: FC<InputKeyProps> = ({
   showInvalidMessage = false,
 }): JSX.Element => {
-  const [inputKeyValue, setInputKeyValue] = useState<string>("");
+  const inputKey = useRef<HTMLInputElement>(null);
   const setToken = useAuthStore((state) => state.setToken);
 
-  const handleInputKeyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputKeyValue(event.target.value);
-  };
-
   const handleSaveKeyClick = () => {
-    setToken(inputKeyValue);
+    if (inputKey.current) {
+      setToken(inputKey.current.value);
+    }
   };
 
   return (
@@ -29,8 +27,7 @@ const InputKey: FC<InputKeyProps> = ({
         <Input
           type="text"
           className="w-96 border-gray-400 border-2 placeholder-red placeholder-opacity-0"
-          value={inputKeyValue}
-          onChange={handleInputKeyChange}
+          ref={inputKey}
           placeholder="Enter API KEY of APOD"
         />
         <Button
