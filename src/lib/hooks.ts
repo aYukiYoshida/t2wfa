@@ -6,7 +6,7 @@ import {useAuthStore, useDateStore} from "@/lib/store";
 import {ApodImageResponse} from "@/lib/types";
 
 const useFetchApodImage = () => {
-  const apiKey: string = useAuthStore((state) => state.apiKey) ?? "DEMO_KEY";
+  const apiKey: string = useAuthStore((state) => state.apiKey) || "DEMO_KEY";
   const date: Date | undefined = useDateStore((state) => state.date);
   const setApiKeyValid = useAuthStore((state) => state.setApiKeyValid);
   const [image, setImage] = useState<ApodImageResponse>();

@@ -7,7 +7,7 @@ import {
 } from "@/lib/cookie";
 
 export type AuthState = {
-  apiKey: string | null; // 現在のAPIキー
+  apiKey: string; // 現在のAPIキー
   isApiKeyValid: boolean; // APIキーが有効かどうか（セッションのみ）
   setApiKey: (apiKey: string) => void; // APIキーを設定し、Cookieにも保存
   clearApiKey: () => void; // APIキーをクリアし、Cookieも削除
@@ -18,7 +18,7 @@ export const useAuthStore = create<AuthState>((set) => {
   // 初期状態はCookieから取得
   const initialApiKey = getApiKeyFromCookie();
   return {
-    apiKey: initialApiKey,
+    apiKey: initialApiKey ?? "",
     isApiKeyValid: true, // 初期状態は有効と仮定（セッションのみ、リロードでリセット）
     setApiKey: (apiKey) => {
       setApiKeyToCookie(apiKey);
@@ -26,7 +26,7 @@ export const useAuthStore = create<AuthState>((set) => {
     },
     clearApiKey: () => {
       clearApiKeyCookie();
-      set({apiKey: null, isApiKeyValid: true});
+      set({apiKey: "", isApiKeyValid: true});
     },
     setApiKeyValid: (isValid) => set({isApiKeyValid: isValid}),
   };
