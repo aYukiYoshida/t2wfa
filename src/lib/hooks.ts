@@ -1,4 +1,4 @@
-import {useState, useEffect} from "react";
+import {useState, useEffect, useMemo} from "react";
 
 import Api from "@/lib/api";
 import {InvalidApiKeyError} from "@/lib/errors";
@@ -38,7 +38,14 @@ const useFetchApodImage = () => {
     fetchImage();
   }, [apiKey, date, setApiKeyValid]);
 
-  return {image, loading, error};
+  return useMemo(
+    () => ({
+      image,
+      loading,
+      error,
+    }),
+    [image, loading, error]
+  );
 };
 
 const useValidateApiKey = () => {
@@ -72,7 +79,7 @@ const useValidateApiKey = () => {
     validateApiKey();
   }, [apiKey, isApiKeyValid, setApiKeyValid]);
 
-  return {isValidating, error};
+  return useMemo(() => ({isValidating, error}), [isValidating, error]);
 };
 
 export default {useFetchApodImage, useValidateApiKey};
