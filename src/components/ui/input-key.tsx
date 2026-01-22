@@ -1,4 +1,4 @@
-import {useRef, FC} from "react";
+import {useCallback, useRef, FC} from "react";
 
 import {Button} from "@/components/ui/button";
 import {CardContent} from "@/components/ui/card";
@@ -20,11 +20,11 @@ const InputKey: FC<InputKeyProps> = ({
   // APIキーの検証を行う
   const {isValidating, error} = Hooks.useValidateApiKey();
 
-  const handleSaveKeyClick = () => {
+  const handleSaveKeyClick = useCallback(() => {
     if (inputApiKey.current) {
       setApiKey(inputApiKey.current.value);
     }
-  };
+  }, [setApiKey]);
 
   return (
     <CardContent>
