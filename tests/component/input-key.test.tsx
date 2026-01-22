@@ -1,6 +1,7 @@
-import {expect, describe, test} from "vitest";
 import {userEvent} from "@vitest/browser/context";
+import {expect, describe, test} from "vitest";
 import {render} from "vitest-browser-react";
+
 import {InputKey} from "@/components/ui/input-key";
 
 describe("InputKey Component", () => {

@@ -1,6 +1,6 @@
-import {describe, afterEach, afterAll, beforeAll, it, vi} from "vitest";
 import {http, HttpResponse} from "msw";
 import {setupServer} from "msw/node";
+import {describe, afterEach, afterAll, beforeAll, it, vi} from "vitest";
 
 import Api from "@/lib/api";
 

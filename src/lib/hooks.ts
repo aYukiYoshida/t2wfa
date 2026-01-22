@@ -1,7 +1,8 @@
 import {useState, useEffect} from "react";
-import {ApodImageResponse} from "@/lib/types";
+
 import Api from "@/lib/api";
 import {useAuthStore, useDateStore} from "@/lib/store";
+import {ApodImageResponse} from "@/lib/types";
 
 const useFetchApodImage = () => {
   const key: string = useAuthStore((state) => state.token) ?? "DEMO_KEY";

@@ -1,7 +1,8 @@
 import {FC} from "react";
+
 import {Card, CardHeader, CardTitle, CardContent} from "@/components/ui/card";
-import {ExpandableText} from "@/components/ui/expandable-text";
 import {DatePickerDialog} from "@/components/ui/date-picker-dialog";
+import {ExpandableText} from "@/components/ui/expandable-text";
 import Hooks from "@/lib/hooks";
 
 const ImageCard: FC = (): JSX.Element => {

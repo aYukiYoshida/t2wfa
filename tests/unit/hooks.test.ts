@@ -1,8 +1,9 @@
 import {act, renderHook, waitFor} from "@testing-library/react";
 import {describe, beforeEach, afterEach, it, vi} from "vitest";
+
+import Api from "@/lib/api";
 import Hooks from "@/lib/hooks";
 import {useDateStore} from "@/lib/store";
-import Api from "@/lib/api";
 
 describe("Hooks.useFetchApodImage", () => {
   // テストスタブ(テスト対象への間接入力を操作するテストダブル)の定義
