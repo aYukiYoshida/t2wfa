@@ -3,6 +3,7 @@ import {useCallback, useRef, FC} from "react";
 import {Button} from "@/components/ui/button";
 import {CardContent} from "@/components/ui/card";
 import {Input} from "@/components/ui/input";
+import {MessageText} from "@/components/ui/message-text";
 import {Spinner} from "@/components/ui/spinner";
 import Hooks from "@/lib/hooks";
 import {useAuthStore} from "@/lib/store";
@@ -52,7 +53,9 @@ const InputKey: FC<InputKeyProps> = ({
           </Button>
         </div>
         {showInvalidMessage && (
-          <p className="text-red-500 pt-1">{error?.message}</p>
+          <MessageText className="text-red-500 pt-1">
+            {error?.message}
+          </MessageText>
         )}
       </div>
     </CardContent>
