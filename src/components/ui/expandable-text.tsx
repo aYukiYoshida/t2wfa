@@ -1,15 +1,15 @@
-import {useState, FC} from "react";
+import {useState, useCallback, memo, FC} from "react";
 
 type ExpandableTextProps = {
   text: string; // text は文字列型
 };
 
-const ExpandableText: FC<ExpandableTextProps> = ({text}): JSX.Element => {
+const ExpandableText: FC<ExpandableTextProps> = memo(({text}): JSX.Element => {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const toggleText = () => {
-    setIsExpanded(!isExpanded);
-  };
+  const toggleText = useCallback(() => {
+    setIsExpanded((prev) => !prev); // 関数形式で更新
+  }, []);
 
   return (
     <div className="max-w-sm">
@@ -26,6 +26,6 @@ const ExpandableText: FC<ExpandableTextProps> = ({text}): JSX.Element => {
       </p>
     </div>
   );
-};
+});
 
 export {ExpandableText};
