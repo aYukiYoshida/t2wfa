@@ -1,9 +1,9 @@
-import {Loader2} from "lucide-react";
 import {useRef, FC} from "react";
 
 import {Button} from "@/components/ui/button";
 import {CardContent} from "@/components/ui/card";
 import {Input} from "@/components/ui/input";
+import {Spinner} from "@/components/ui/spinner";
 import Hooks from "@/lib/hooks";
 import {useAuthStore} from "@/lib/store";
 
@@ -43,7 +43,7 @@ const InputKey: FC<InputKeyProps> = ({
           >
             {isValidating ? (
               <>
-                <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                <Spinner className="h-4 w-4 animate-spin mr-2" />
                 Validating...
               </>
             ) : (
