@@ -3,6 +3,7 @@ import {FC} from "react";
 import {Card, CardHeader, CardTitle, CardContent} from "@/components/ui/card";
 import {DatePickerDialog} from "@/components/ui/date-picker-dialog";
 import {ExpandableText} from "@/components/ui/expandable-text";
+import {MessageText} from "@/components/ui/message-text";
 import Hooks from "@/lib/hooks";
 
 const ImageCard: FC = (): JSX.Element => {
@@ -18,9 +19,9 @@ const ImageCard: FC = (): JSX.Element => {
       </CardHeader>
       <CardContent>
         {loading ? (
-          <p className="text-white text-center">Loading...</p>
+          <MessageText text="Loading..." />
         ) : !image || error ? (
-          <p className="text-white text-center">Error: {error?.message}</p>
+          <MessageText text={`Error: ${error?.message}`} />
         ) : (
           <>
             <div className="relative aspect-square mb-6 overflow-hidden rounded-lg shadow-2xl">
