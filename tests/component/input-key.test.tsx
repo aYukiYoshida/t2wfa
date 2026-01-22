@@ -19,7 +19,7 @@ describe("InputKey Component", () => {
     expect(saveButton).toBeEnabled();
   });
 
-  test("保存ボタンをクリックするとトークンが設定されること", async () => {
+  test("保存ボタンをクリックするとAPIキーが設定されること", async () => {
     const component = render(<InputKey />);
     const inputField = component.getByPlaceholder("Enter API KEY of APOD");
     const saveButton = component.getByRole("button", {name: "Save"});
@@ -28,7 +28,7 @@ describe("InputKey Component", () => {
     await userEvent.fill(inputField, "test-api-key");
     await userEvent.click(saveButton);
 
-    // トークンが設定されたか確認
-    expect(document.cookie).toContain("apod-token=test-api-key");
+    // APIキーが設定されたか確認
+    expect(document.cookie).toContain("apod-api-key=test-api-key");
   });
 });

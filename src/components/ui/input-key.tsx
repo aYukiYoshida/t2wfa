@@ -11,12 +11,12 @@ type InputKeyProps = {
 const InputKey: FC<InputKeyProps> = ({
   showInvalidMessage = false,
 }): JSX.Element => {
-  const inputKey = useRef<HTMLInputElement>(null);
-  const setToken = useAuthStore((state) => state.setToken);
+  const inputApiKey = useRef<HTMLInputElement>(null);
+  const setApiKey = useAuthStore((state) => state.setApiKey);
 
   const handleSaveKeyClick = () => {
-    if (inputKey.current) {
-      setToken(inputKey.current.value);
+    if (inputApiKey.current) {
+      setApiKey(inputApiKey.current.value);
     }
   };
 
@@ -27,7 +27,7 @@ const InputKey: FC<InputKeyProps> = ({
         <Input
           type="text"
           className="w-96 border-gray-400 border-2 placeholder-red placeholder-opacity-0"
-          ref={inputKey}
+          ref={inputApiKey}
           placeholder="Enter API KEY of APOD"
         />
         <Button

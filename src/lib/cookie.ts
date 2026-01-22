@@ -1,4 +1,4 @@
-const TOKEN_COOKIE_NAME = "apod-token";
+const API_KEY_COOKIE_NAME = "apod-api-key";
 
 /**
  * Cookieオプションの型定義
@@ -17,9 +17,9 @@ interface CookieOptions {
  *
  * @returns Cookieの値 (見つからない場合は`null`)
  */
-export const getTokenFromCookie = (): string | null => {
+export const getApiKeyFromCookie = (): string | null => {
   const match = document.cookie.match(
-    new RegExp(`(^| )${TOKEN_COOKIE_NAME}=([^;]+)`)
+    new RegExp(`(^| )${API_KEY_COOKIE_NAME}=([^;]+)`)
   );
   return match ? decodeURIComponent(match[2]) : null;
 };
@@ -29,7 +29,7 @@ export const getTokenFromCookie = (): string | null => {
  * @param value - Cookieの値
  * @param options - Cookieのオプション
  */
-export const setTokenToCookie = (
+export const setApiKeyToCookie = (
   value: string,
   options: CookieOptions = {}
 ): void => {
@@ -46,7 +46,7 @@ export const setTokenToCookie = (
 
   // Cookieのオプションを文字列形式に変換
   const cookieString =
-    `${TOKEN_COOKIE_NAME}=${encodeURIComponent(value)};` +
+    `${API_KEY_COOKIE_NAME}=${encodeURIComponent(value)};` +
     Object.entries(combinedOptions)
       .map(([key, val]) => {
         if (val === true) return key; // 値がtrueの場合、属性名だけを追加（例: 'Secure'）
@@ -64,7 +64,7 @@ export const setTokenToCookie = (
   console.log(`Cookie Set: ${cookieString}`);
 };
 
-export const clearTokenCookie = (): void => {
-  setTokenToCookie("", {maxAge: 0}); // 期限を0に設定してCookieを削除
-  console.log(`Cookie Cleared: ${TOKEN_COOKIE_NAME}`);
+export const clearApiKeyCookie = (): void => {
+  setApiKeyToCookie("", {maxAge: 0}); // 期限を0に設定してCookieを削除
+  console.log(`Cookie Cleared: ${API_KEY_COOKIE_NAME}`);
 };

@@ -4,11 +4,11 @@ import {InputKey} from "@/components/ui/input-key";
 import {useAuthStore} from "@/lib/store";
 
 function App() {
-  const token = useAuthStore((state) => state.token);
-  const isApiKeyValid = useAuthStore((state) => state.isTokenValid);
+  const apiKey = useAuthStore((state) => state.apiKey);
+  const isApiKeyValid = useAuthStore((state) => state.isApiKeyValid);
 
-  // トークンがあっても無効キーの場合は再入力画面を表示
-  if (token !== null && token !== "" && isApiKeyValid) {
+  // APIキーがあっても無効な場合は再入力画面を表示
+  if (apiKey !== null && apiKey !== "" && isApiKeyValid) {
     return (
       <Background className="items-start">
         <ImageCard />

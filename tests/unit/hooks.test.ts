@@ -47,7 +47,7 @@ describe("Hooks.useFetchApodImage", () => {
 
         expect(getApodImageSpy).toHaveBeenCalledTimes(1);
         expect(getApodImageSpy).toHaveBeenCalledWith({
-          key: "DEMO_KEY",
+          apiKey: "DEMO_KEY",
           date: undefined,
         });
         expect(result.current.image).toEqual({
@@ -167,7 +167,10 @@ describe("Hooks.useFetchApodImage", () => {
           expect(result.current.image).not.toBeNull();
         });
         expect(getApodImageSpy).toHaveBeenCalledTimes(1);
-        expect(getApodImageSpy).toHaveBeenCalledWith({key: "DEMO_KEY", date});
+        expect(getApodImageSpy).toHaveBeenCalledWith({
+          apiKey: "DEMO_KEY",
+          date,
+        });
       });
     });
   });

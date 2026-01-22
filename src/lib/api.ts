@@ -17,10 +17,10 @@ function getApodDate(date: Date): string {
 }
 
 async function getApodImage(
-  options: {key?: string; date?: Date} = {}
+  options: {apiKey?: string; date?: Date} = {}
 ): Promise<ApodImageResponse> {
   const params: {api_key?: string; date?: string} = {
-    api_key: options.key !== undefined ? options.key : "DEMO_KEY",
+    api_key: options.apiKey !== undefined ? options.apiKey : "DEMO_KEY",
     date: options.date ? getApodDate(options.date) : undefined,
   };
   const filteredParams = Object.fromEntries(

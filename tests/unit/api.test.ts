@@ -38,7 +38,7 @@ describe("テストスパイを用いたテストコードの例", () => {
           expect,
         }) => {
           const fetchSpy = arrangeFetchSpy();
-          await Api.getApodImage({key: "SPECIFIED_KEY"});
+          await Api.getApodImage({apiKey: "SPECIFIED_KEY"});
           expect(fetchSpy).toHaveBeenCalledTimes(1);
           expect(fetchSpy).toHaveBeenCalledWith(
             "https://api.nasa.gov/planetary/apod?api_key=SPECIFIED_KEY"
@@ -132,7 +132,7 @@ describe("フェイクオブジェクトを用いたテストコードの例", (
       describe("指定する場合", () => {
         describe("有効なAPIキーの場合", () => {
           it("APODの画像情報の取得が成功する", async ({expect}) => {
-            const apodImage = await Api.getApodImage({key: "VALID_KEY"});
+            const apodImage = await Api.getApodImage({apiKey: "VALID_KEY"});
             expect(apodImage).toEqual({
               copyright: "copyright",
               date: "2025-02-26",
@@ -149,7 +149,7 @@ describe("フェイクオブジェクトを用いたテストコードの例", (
         describe("無効なAPIキーの場合", () => {
           it("APODの画像情報の取得が失敗する", async ({expect}) => {
             await expect(
-              Api.getApodImage({key: "INVALID_KEY"})
+              Api.getApodImage({apiKey: "INVALID_KEY"})
             ).rejects.toThrowError("Invalid API key: 403 Forbidden");
           });
         });
