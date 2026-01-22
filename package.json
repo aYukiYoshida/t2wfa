@@ -6,14 +6,14 @@
   "scripts": {
     "prepare": "run-p prepare:*",
     "prepare:husky": "husky install",
-    "dev": "vite",
+    "start": "vite",
     "build:tsc": "tsc -b",
     "build:vite": "vite build",
     "build": "failsafe build:tsc build:vite",
+    "prebuild": "failsafe lint format",
     "preview": "vite preview",
     "lint": "eslint --fix .",
     "format": "prettier --write .",
-    "prebuild": "failsafe lint format",
     "test": "vitest run",
     "test:unit": "vitest run --project=unit",
     "test:component": "vitest run --project=component"
