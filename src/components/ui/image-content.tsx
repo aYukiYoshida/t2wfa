@@ -12,15 +12,21 @@ const ImageContent: FC = (): JSX.Element => {
   return (
     <CardContent>
       {loading ? (
-        <MessageText>Loading...</MessageText>
+        <MessageText className="text-white text-center">Loading...</MessageText>
       ) : error ? (
         error instanceof TooManyRequestsError ? (
-          <MessageText>{error.message}</MessageText>
+          <MessageText className="text-red-500 text-center">
+            {error.message}
+          </MessageText>
         ) : (
-          <MessageText>Error: {error.message}</MessageText>
+          <MessageText className="text-red-500 text-center">
+            Error: {error.message}
+          </MessageText>
         )
       ) : !image ? (
-        <MessageText>No image available</MessageText>
+        <MessageText className="text-red-500 text-center">
+          No image available.
+        </MessageText>
       ) : (
         <>
           <div className="relative aspect-square mb-6 overflow-hidden rounded-lg shadow-2xl">

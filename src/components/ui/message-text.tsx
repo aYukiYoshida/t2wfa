@@ -1,15 +1,12 @@
-import {FC, ReactNode} from "react";
+import * as React from "react";
 
-type MessageTextProps = {
-  children: ReactNode;
-};
-
-const MessageText: FC<MessageTextProps> = ({children}): JSX.Element => {
-  return (
-    <div className="max-w-sm">
-      <p className="text-white text-center">{children}</p>
-    </div>
-  );
-};
+const MessageText = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({className, ...props}, ref) => (
+  <div className="max-w-sm">
+    <p ref={ref} className={className} {...props} />
+  </div>
+));
 
 export {MessageText};
