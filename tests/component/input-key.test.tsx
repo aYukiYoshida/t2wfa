@@ -5,18 +5,18 @@ import {render} from "vitest-browser-react";
 import {InputKey} from "@/components/ui/input-key";
 
 describe("InputKey Component", () => {
-  test("キー入力欄が表示されること", () => {
+  test("キー入力欄が表示されること", async () => {
     const component = render(<InputKey />);
     const inputField = component.getByPlaceholder("Enter API KEY of APOD");
-    expect(inputField).toBeVisible();
-    expect(inputField).toBeEnabled();
+    await expect(inputField).toBeVisible();
+    await expect(inputField).toBeEnabled();
   });
 
-  test("保存ボタンが表示されること", () => {
+  test("保存ボタンが表示されること", async () => {
     const component = render(<InputKey />);
     const saveButton = component.getByRole("button", {name: "Save"});
-    expect(saveButton).toBeVisible();
-    expect(saveButton).toBeEnabled();
+    await expect(saveButton).toBeVisible();
+    await expect(saveButton).toBeEnabled();
   });
 
   test("保存ボタンをクリックするとAPIキーが設定されること", async () => {

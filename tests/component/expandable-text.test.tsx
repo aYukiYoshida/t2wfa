@@ -13,10 +13,10 @@ describe("ExpandableText Component", () => {
     );
     const textElement = component.getByTestId("ExpandableText");
 
-    expect(textElement).toHaveAttribute("title", "Click to expand");
-    expect(textElement).toHaveClass("text-ellipsis");
-    expect(textElement).toHaveClass("overflow-hidden");
-    expect(textElement).toHaveClass("whitespace-nowrap");
+    await expect(textElement).toHaveAttribute("title", "Click to expand");
+    await expect(textElement).toHaveClass("text-ellipsis");
+    await expect(textElement).toHaveClass("overflow-hidden");
+    await expect(textElement).toHaveClass("whitespace-nowrap");
   });
 
   test("クリック後の場合文字列が省略されずに表示されること", async () => {
@@ -29,10 +29,10 @@ describe("ExpandableText Component", () => {
 
     await userEvent.click(textElement);
 
-    expect(textElement).toHaveAttribute("title", "Click to collapse");
-    expect(textElement).toHaveClass("text-balance");
-    expect(textElement).toHaveClass("whitespace-normal");
-    expect(textElement).toHaveClass("break-words");
-    expect(textElement).toHaveClass("hyphens-auto");
+    await expect(textElement).toHaveAttribute("title", "Click to collapse");
+    await expect(textElement).toHaveClass("text-balance");
+    await expect(textElement).toHaveClass("whitespace-normal");
+    await expect(textElement).toHaveClass("break-words");
+    await expect(textElement).toHaveClass("hyphens-auto");
   });
 });
