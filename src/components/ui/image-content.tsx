@@ -37,10 +37,18 @@ const ImageContent: FC = (): JSX.Element => {
             />
           </div>
           <div className="text-center mb-2">
-            <h2 className="text-2xl font-bold m-1">{image.title}</h2>
-            <p className="text-gray-400">&copy; {image.copyright}</p>
+            <h2 className="text-2xl font-bold m-1" aria-label="title">
+              {image.title}
+            </h2>
+            <small className="text-gray-400" aria-label="copyright">
+              &copy; {image.copyright}
+            </small>
           </div>
-          <ExpandableText>{image.explanation}</ExpandableText>
+          <div className="m-1">
+            <ExpandableText aria-label="description">
+              {image.explanation}
+            </ExpandableText>
+          </div>
         </>
       )}
     </CardContent>
