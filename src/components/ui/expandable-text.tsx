@@ -10,19 +10,18 @@ const ExpandableText = React.memo(
       }, []);
 
       return (
-        <div className="max-w-sm">
-          <p
-            ref={ref}
-            onClick={toggleText}
-            className={`cursor-pointer transition-all duration-300 ${
-              isExpanded
-                ? "text-balance whitespace-normal break-words hyphens-auto"
-                : "text-ellipsis overflow-hidden whitespace-nowrap"
-            }`}
-            title={isExpanded ? "Click to collapse" : "Click to expand"}
-            {...props}
-          />
-        </div>
+        <p
+          ref={ref}
+          onClick={toggleText}
+          aria-expanded={isExpanded}
+          className={`cursor-pointer transition-all duration-300 ${
+            isExpanded
+              ? "text-balance whitespace-normal break-words hyphens-auto"
+              : "text-ellipsis overflow-hidden whitespace-nowrap"
+          }`}
+          title={isExpanded ? "Click to collapse" : "Click to expand"}
+          {...props}
+        />
       );
     }
   )
