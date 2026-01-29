@@ -1,4 +1,11 @@
-import {useState, useEffect, useMemo} from "react";
+import {
+  useState,
+  useEffect,
+  useMemo,
+  useRef,
+  useCallback,
+  RefObject,
+} from "react";
 
 import Api from "@/lib/api";
 import {InvalidApiKeyError} from "@/lib/errors";
@@ -82,4 +89,28 @@ const useValidateApiKey = () => {
   return useMemo(() => ({isValidating, error}), [isValidating, error]);
 };
 
-export default {useFetchApodImage, useValidateApiKey};
+type UseApiKeyInputReturn = {
+  inputRef: RefObject<HTMLInputElement>;
+  isValidating: boolean;
+  error: Error | null;
+  handleSave: () => void;
+};
+
+const useApiKeyInput = (): UseApiKeyInputReturn => {
+  const inputRef = useRef<HTMLInputElement>(null!);
+  const setApiKey = useAuthStore((state) => state.setApiKey);
+  const {isValidating, error} = useValidateApiKey();
+
+  const handleSave = useCallback(() => {
+    if (inputRef.current) {
+      setApiKey(inputRef.current.value);
+    }
+  }, [setApiKey]);
+
+  return useMemo(
+    () => ({inputRef, isValidating, error, handleSave}),
+    [isValidating, error, handleSave]
+  );
+};
+
+export default {useFetchApodImage, useValidateApiKey, useApiKeyInput};

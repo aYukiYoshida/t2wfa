@@ -316,3 +316,112 @@ describe("Hooks.useValidateApiKey", () => {
     });
   });
 });
+
+describe("Hooks.useApiKeyInput", () => {
+  beforeEach(() => {
+    // 認証ストアを初期状態にリセット
+    act(() => {
+      useAuthStore.setState({apiKey: "", isApiKeyValid: true});
+    });
+  });
+
+  afterEach(() => {
+    vi.resetAllMocks();
+  });
+
+  describe("初期状態の場合", () => {
+    it("未入力となる", ({expect}) => {
+      const {result} = renderHook(() => Hooks.useApiKeyInput());
+
+      expect(result.current.inputRef).toBeDefined();
+      expect(result.current.inputRef.current).toBeNull();
+    });
+
+    it("未検証の状態になる", ({expect}) => {
+      const {result} = renderHook(() => Hooks.useApiKeyInput());
+
+      expect(result.current.isValidating).toBe(false);
+    });
+
+    it("エラーは設定されない", ({expect}) => {
+      const {result} = renderHook(() => Hooks.useApiKeyInput());
+
+      expect(result.current.error).toBeNull();
+    });
+  });
+
+  describe("APIキー検証", () => {
+    it("APIキーの検証時には検証中の状態になる", async ({expect}) => {
+      vi.spyOn(Api, "getApodImage").mockResolvedValue({
+        title: "Test",
+        explanation: "Test",
+        copyright: "Test",
+        media_type: "image",
+        hdurl: "https://example.com/image.jpg",
+        url: "https://example.com/image.jpg",
+        service_version: "v1",
+        date: "2025-02-26",
+      });
+
+      act(() => {
+        useAuthStore.setState({apiKey: "test-api-key", isApiKeyValid: null});
+      });
+
+      const {result} = renderHook(() => Hooks.useApiKeyInput());
+
+      // 検証中はisValidatingがtrue
+      expect(result.current.isValidating).toBe(true);
+
+      // 非同期処理の完了を待つ
+      await waitFor(() => {
+        expect(result.current.isValidating).toBe(false);
+      });
+    });
+
+    it("APIキーの検証に失敗した場合はエラーが設定される", async ({expect}) => {
+      const testError = new InvalidApiKeyError();
+      vi.spyOn(Api, "getApodImage").mockRejectedValue(testError);
+
+      act(() => {
+        useAuthStore.setState({apiKey: "invalid-key", isApiKeyValid: null});
+      });
+
+      const {result} = renderHook(() => Hooks.useApiKeyInput());
+
+      // 非同期処理の完了を待つ
+      await waitFor(() => {
+        expect(result.current.isValidating).toBe(false);
+      });
+
+      expect(result.current.error).toEqual(testError);
+    });
+  });
+
+  describe("APIキー保存", () => {
+    it("キーが入力されている場合保存する", ({expect}) => {
+      const {result} = renderHook(() => Hooks.useApiKeyInput());
+
+      // inputRefにモック要素を設定
+      const mockInput = {value: "test-api-key"} as HTMLInputElement;
+      // @ts-expect-error - テスト用にcurrentを直接設定
+      result.current.inputRef.current = mockInput;
+
+      act(() => {
+        result.current.handleSave();
+      });
+
+      expect(useAuthStore.getState().apiKey).toBe("test-api-key");
+    });
+
+    it("キーが入力されていない場合保存しない", ({expect}) => {
+      const initialApiKey = useAuthStore.getState().apiKey;
+      const {result} = renderHook(() => Hooks.useApiKeyInput());
+
+      act(() => {
+        result.current.handleSave();
+      });
+
+      expect(useAuthStore.getState().apiKey).toBe(initialApiKey);
+    });
+  });
+});
