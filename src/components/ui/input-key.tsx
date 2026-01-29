@@ -1,10 +1,9 @@
 import {useCallback, useRef, FC} from "react";
 
-import {Button} from "@/components/ui/button";
 import {CardContent} from "@/components/ui/card";
 import {Input} from "@/components/ui/input";
 import {MessageText} from "@/components/ui/message-text";
-import {Spinner} from "@/components/ui/spinner";
+import {SaveKeyButton} from "@/components/ui/save-key-button";
 import Hooks from "@/lib/hooks";
 import {useAuthStore} from "@/lib/store";
 
@@ -37,20 +36,10 @@ const InputKey: FC<InputKeyProps> = ({
             ref={inputApiKey}
             placeholder="Enter API KEY of APOD"
           />
-          <Button
+          <SaveKeyButton
             onClick={handleSaveKeyClick}
-            disabled={isValidating}
-            className="bg-gray-400 background rounded-md hover:bg-gray-700"
-          >
-            {isValidating ? (
-              <>
-                <Spinner className="h-4 w-4 animate-spin mr-2" />
-                Validating...
-              </>
-            ) : (
-              "Save"
-            )}
-          </Button>
+            isValidating={isValidating}
+          />
         </div>
         {showInvalidMessage && (
           <MessageText className="text-red-500 pt-1">
